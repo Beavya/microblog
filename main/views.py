@@ -14,7 +14,6 @@ from django.views.generic import UpdateView
 from .models import Post
 from .forms import PostForm
 
-
 def index(request):
     posts = Post.objects.select_related('author').order_by('-created_at')
     paginator = Paginator(posts, 50)
@@ -74,11 +73,18 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'main/post_update.html'
+    success_url = reverse_lazy('main:index')
+
+    def test_func(self):
+        return self.get_object().author == self.request.user
+
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    template_name = 'main/post_delete.html'
     success_url = reverse_lazy('main:index')
 
     def test_func(self):
