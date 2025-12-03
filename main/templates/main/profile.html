@@ -29,17 +29,27 @@
 
 {% if page_obj %}
   {% for post in page_obj %}
-    <div class="card mb-2">
-      <div class="card-body">
-        <h5 class="card-title">{{ post.title }}</h5>
-        <p class="card-text">{{ post.content|truncatewords:30 }}</p>
-        <small class="text-muted">
-          {{ post.created_at|date:"d.m.Y H:i" }} •
-          Комментариев: 0 •
-          Лайков: 0
-        </small>
-      </div>
-    </div>
+
+     <a href="{% url 'main:post_detail' post.pk %}" class="text-decoration-none text-dark">
+       <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title">{{ post.title }}</h5>
+            <p class="card-text">{{ post.content|truncatewords:30 }}</p>
+            <p class="text-muted">
+              Автор: {{ post.author.username }} •
+              {{ post.created_at|date:"d.m.Y H:i" }} •
+              Комментариев: 0 •
+              Лайков: 0
+            </p>
+            {% if user.is_authenticated and user == post.author %}
+              <div class="mt-2">
+                <a href="{% url 'main:post_edit' post.pk %}" class="btn btn-sm btn-outline-primary">Редактировать</a>
+                <a href="{% url 'main:post_delete' post.pk %}" class="btn btn-sm btn-outline-danger">Удалить</a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </a>
   {% endfor %}
 
   {% bootstrap_pagination page_obj extra=request.GET.urlencode %}
