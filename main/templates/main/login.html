@@ -1,5 +1,22 @@
+<!-- main/templates/main/login.html -->
 {% extends "layout/base.html" %}
+{% load bootstrap4 %}
+{% block title %}Вход{% endblock %}
 {% block content %}
-<p>Страница входа (ещё не реализована).</p>
-<a href="{% url 'main:register' %}">Назад к регистрации</a>
+<h2>Вход</h2>
+
+{% if user.is_authenticated %}
+  <p>Вы уже вошли как {{ user.username }}.</p>
+  <a href="{% url 'main:index' %}" class="btn btn-outline-primary">На главную</a>
+{% else %}
+  <form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    <input type="hidden" name="next" value="{{ next }}">
+    {% buttons submit='Войти' %}{% endbuttons %}
+  </form>
+  <p class="mt-3">
+    Нет аккаунта? <a href="{% url 'main:register' %}">Зарегистрируйтесь</a>
+  </p>
+{% endif %}
 {% endblock %}
