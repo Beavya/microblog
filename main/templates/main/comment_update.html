@@ -1,12 +1,12 @@
 {% extends "layout/base.html" %}
 {% load bootstrap4 %}
-{% block title %}Редактировать пост{% endblock %}
+{% block title %}Редактировать комментарий{% endblock %}
 {% block content %}
-<h2>Редактировать пост</h2>
+<h2>Редактировать комментарий</h2>
 <form method="post">
   {% csrf_token %}
   {% bootstrap_form form layout='horizontal' %}
   {% buttons submit='Сохранить' %}{% endbuttons %}
 </form>
-<a href="{% url 'main:index' %}" class="btn btn-outline-secondary">Отмена</a>
+<a href="{% url 'main:post_detail' post.pk %}" class="btn btn-outline-secondary">Отмена</a>
 {% endblock %}
