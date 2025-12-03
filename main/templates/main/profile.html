@@ -1,0 +1,18 @@
+{% extends "layout/base.html" %}
+{% load bootstrap4 %}
+{% block title %}Профиль{% endblock %}
+{% block content %}
+<h2>Профиль пользователя: {{ user.username }}</h2>
+
+{% if user.avatar %}
+  <img src="{{ user.avatar.url }}" class="img-thumbnail rounded-circle mb-3" width="120" alt="Аватар">
+{% endif %}
+
+<p><strong>Email:</strong> {{ user.email|default:"Не указан" }}</p>
+<p><strong>Имя:</strong> {{ user.first_name|default:"—" }} {{ user.last_name|default:"—" }}</p>
+<p><strong>О себе:</strong> {{ user.bio|default:"Не указано" }}</p>
+
+<div class="mt-4">
+  <a href="{% url 'main:index' %}" class="btn btn-outline-primary">На главную</a>
+</div>
+{% endblock %}
