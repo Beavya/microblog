@@ -71,3 +71,25 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Комментарий от {self.author.username} к посту {self.post.id}'
+
+class Like(models.Model):
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='likes',
+        verbose_name='Пост'
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name='Пользователь'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Лайк'
+        verbose_name_plural = 'Лайки'
+        unique_together = ('post', 'user')
+
+    def __str__(self):
+        return f'{self.user.username} лайкнул пост {self.post.id}'

@@ -1,19 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import CreateView
-from .forms import CommentForm
-from .forms import RegisterUserForm
-from django.contrib.auth.decorators import login_required
-from django.contrib.messages.views import SuccessMessageMixin
-from .forms import ChangeUserInfoForm
-from .models import AdvUser, Comment
-from django.views.generic import DeleteView
-from django.contrib import messages
+from django.urls import reverse, reverse_lazy
 from django.core.paginator import Paginator
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.urls import reverse_lazy, reverse
-from django.views.generic import UpdateView
-from .models import Post
-from .forms import PostForm
+from django.views.generic import CreateView, UpdateView, DeleteView
+from django.contrib.messages.views import SuccessMessageMixin
+from .models import AdvUser, Post, Comment, Like
+from .forms import RegisterUserForm, ChangeUserInfoForm, PostForm, CommentForm
 
 def index(request):
     posts = Post.objects.select_related('author').order_by('-created_at')
@@ -96,6 +90,10 @@ def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     comments = post.comments.select_related('author').order_by('created_at')
 
+    liked = False
+    if request.user.is_authenticated:
+        liked = post.likes.filter(user=request.user).exists()
+
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -110,7 +108,8 @@ def post_detail(request, pk):
     return render(request, 'main/post_detail.html', {
         'post': post,
         'comments': comments,
-        'form': form
+        'form': form,
+        'liked': liked,
     })
 
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -143,3 +142,11 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context['post'] = self.object.post
         return context
+
+@login_required
+def like_post(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    like, created = Like.objects.get_or_create(post=post, user=request.user)
+    if not created:
+        like.delete()
+    return redirect('main:post_detail', pk=pk)
