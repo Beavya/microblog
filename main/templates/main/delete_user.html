@@ -1,0 +1,15 @@
+{% extends "layout/base.html" %}
+{% load bootstrap4 %}
+{% block title %}Удаление профиля{% endblock %}
+{% block content %}
+<h2>Удаление профиля</h2>
+<p>Вы уверены, что хотите удалить профиль "{{ object.username }}"?</p>
+<p><strong>Все ваши посты и комментарии будут удалены безвозвратно.</strong></p>
+
+<form method="post">
+  {% csrf_token %}
+  {% buttons submit='Удалить профиль' button_type='danger' %}{% endbuttons %}
+</form>
+
+<a href="{% url 'main:profile' %}" class="btn btn-outline-secondary mt-2">Отмена</a>
+{% endblock %}
