@@ -8,3 +8,16 @@ class RegisterUserForm(UserCreationForm):
     class Meta:
         model = AdvUser
         fields = ('username', 'email', 'password1', 'password2')
+
+class ChangeUserInfoForm(forms.ModelForm):
+    class Meta:
+        model = AdvUser
+        fields = ('username', 'email', 'first_name', 'last_name', 'avatar', 'bio')
+        labels = {
+            'username': 'Имя пользователя',
+            'email': 'Email',
+            'first_name': 'Имя',
+            'last_name': 'Фамилия',
+            'avatar': 'Аватар',
+            'bio': 'О себе',
+        }

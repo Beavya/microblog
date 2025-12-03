@@ -4,6 +4,11 @@ from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView
 from .forms import RegisterUserForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic import UpdateView
+from .forms import ChangeUserInfoForm
+from .models import AdvUser
 
 
 def index(request):
@@ -17,3 +22,15 @@ class RegisterUserView(CreateView):
 @login_required
 def profile(request):
     return render(request, 'main/profile.html')
+
+class ChangeUserInfoView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
+    model = AdvUser
+    form_class = ChangeUserInfoForm
+    template_name = 'main/change_user_info.html'
+    success_message = 'Данные успешно изменены.'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_success_url(self):
+        return reverse_lazy('main:profile')
