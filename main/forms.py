@@ -12,7 +12,7 @@ class RegisterUserForm(UserCreationForm):
 class ChangeUserInfoForm(forms.ModelForm):
     class Meta:
         model = AdvUser
-        fields = ('username', 'email', 'avatar', 'bio')  # ← убрали first_name и last_name
+        fields = ('username', 'email', 'avatar', 'bio')
         labels = {
             'username': 'Имя пользователя',
             'email': 'Email',
