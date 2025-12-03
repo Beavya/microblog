@@ -1,0 +1,19 @@
+{% load static %}
+{% load bootstrap4 %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static 'main/style.css' %}">
+    {% bootstrap_css %}
+    <title>{% block title %}Микроблог{% endblock %}</title>
+</head>
+<body>
+    <div class="container mt-4">
+        {% bootstrap_messages %}
+        {% block content %}{% endblock %}
+    </div>
+    {% bootstrap_javascript jquery='slim' %}
+</body>
+</html>
