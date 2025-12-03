@@ -1,18 +1,19 @@
 from django.shortcuts import render
 from django.views.generic import CreateView
-from django.urls import reverse_lazy
-from django.contrib.auth.views import LoginView
 from .forms import RegisterUserForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import UpdateView
 from .forms import ChangeUserInfoForm
-from .models import AdvUser, Post
+from .models import AdvUser
 from django.views.generic import DeleteView
 from django.contrib import messages
-from .forms import PostForm
 from django.core.paginator import Paginator
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse_lazy
+from django.views.generic import UpdateView
+from .models import Post
+from .forms import PostForm
+
 
 def index(request):
     posts = Post.objects.select_related('author').order_by('-created_at')
@@ -72,3 +73,13 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'main/post_update.html'
+    success_url = reverse_lazy('main:index')
+
+    def test_func(self):
+        return self.get_object().author == self.request.user

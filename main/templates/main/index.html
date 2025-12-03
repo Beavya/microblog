@@ -16,8 +16,14 @@
           Комментариев: 0 •
           Лайков: 0
         </p>
+        {% if user.is_authenticated and user == post.author %}
+          <div class="mt-2">
+            <a href="{% url 'main:post_edit' post.pk %}" class="btn btn-sm btn-outline-primary">Редактировать</a>
+          </div>
+        {% endif %}
       </div>
     </div>
+
   {% endfor %}
 
   {% bootstrap_pagination page_obj extra=request.GET.urlencode %}
