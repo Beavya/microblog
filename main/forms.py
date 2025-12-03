@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import AdvUser
+from .models import AdvUser, Post
 
 class RegisterUserForm(UserCreationForm):
     email = forms.EmailField(required=True, label='Email')
@@ -18,4 +18,16 @@ class ChangeUserInfoForm(forms.ModelForm):
             'email': 'Email',
             'avatar': 'Аватар',
             'bio': 'О себе',
+        }
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content']
+        labels = {
+            'title': 'Заголовок',
+            'content': 'Текст поста',
+        }
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 5}),
         }

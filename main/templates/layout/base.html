@@ -15,12 +15,8 @@
         <a class="navbar-brand" href="{% url 'main:index' %}">Микроблог</a>
         <div class="ml-auto">
             {% if user.is_authenticated %}
-                <span class="navbar-text">Привет, {{ user.username }}!</span>
-                <a class="btn btn-outline-primary btn-sm ml-2" href="{% url 'main:profile' %}">Профиль</a>
-                <form method="post" action="{% url 'main:logout' %}" style="display: inline;">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-outline-secondary btn-sm ml-1">Выйти</button>
-                </form>
+                <a href="{% url 'main:post_create' %}" class="btn btn-primary btn-sm ml-3">Написать пост</a>
+                <a class="btn btn-outline-primary btn-sm ml-3" href="{% url 'main:profile' %}">Профиль</a>
             {% else %}
                 <a class="btn btn-outline-primary btn-sm" href="{% url 'main:login' %}">Вход</a>
                 <a class="btn btn-outline-secondary btn-sm ml-1" href="{% url 'main:register' %}">Регистрация</a>

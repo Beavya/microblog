@@ -1,6 +1,27 @@
 {% extends "layout/base.html" %}
+{% load bootstrap4 %}
 {% block title %}Главная{% endblock %}
 {% block content %}
-<h1>Микроблог</h1>
-<p>Главная страница (заглушка). Модели и страницы аутентификации ещё не реализованы.</p>
+<h1>Последние посты</h1>
+
+{% if page_obj %}
+  {% for post in page_obj %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ post.title }}</h5>
+        <p class="card-text">{{ post.content|truncatewords:30 }}</p>
+        <p class="text-muted">
+          Автор: {{ post.author.username }} •
+          {{ post.created_at|date:"d.m.Y H:i" }} •
+          Комментариев: 0 •
+          Лайков: 0
+        </p>
+      </div>
+    </div>
+  {% endfor %}
+
+  {% bootstrap_pagination page_obj extra=request.GET.urlencode %}
+{% else %}
+  <p>Пока нет ни одного поста.</p>
+{% endif %}
 {% endblock %}
