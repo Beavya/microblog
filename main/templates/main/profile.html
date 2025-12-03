@@ -14,8 +14,8 @@
      width="120"
      alt="Аватар">
 
+<p><strong>Имя пользователя:</strong> {{ user.username }}</p>
 <p><strong>Email:</strong> {{ user.email|default:"Не указан" }}</p>
-<p><strong>Имя:</strong> {{ user.first_name|default:"—" }} {{ user.last_name|default:"—" }}</p>
 <p><strong>О себе:</strong> {{ user.bio|default:"Не указано" }}</p>
 
 <div class="mt-4">

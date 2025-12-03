@@ -14,6 +14,11 @@ class AdvUser(AbstractUser):
         blank=True,
         verbose_name='Информация о себе'
     )
+    email = models.EmailField(
+        verbose_name='Email',
+        unique=True,
+        blank=True
+    )
 
     class Meta:
         verbose_name = 'Пользователь'
